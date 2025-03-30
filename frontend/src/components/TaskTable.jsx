@@ -75,14 +75,13 @@ function TaskTable() {
     filter === "today" ? isToday(task.date) : true
   );
 
-  const sortTasks = () => {
+  const sortTasks = (order) => {
     const sorted = [...tasks].sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      return order === "asc" ? dateA - dateB : dateB - dateA;
     });
     setTasks(sorted);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   const renderTaskCard = (task) => {
@@ -158,9 +157,16 @@ function TaskTable() {
           <option value="today">Today's Tasks</option>
         </select>
 
-        <select onChange={sortTasks} value={sortOrder} style={selectStyle}>
-          <option value="asc">Sort by Date & Time (Oldest First)</option>
-          <option value="desc">Sort by Date & Time (Newest First)</option>
+        <select
+          onChange={(e) => {
+            setSortOrder(e.target.value);
+            sortTasks(e.target.value);
+          }}
+          value={sortOrder}
+          style={selectStyle}
+        >
+          <option value="asc">Sort by Date & Time (Due Soonest First)</option>
+          <option value="desc">Sort by Date & Time (Due Latest First)</option>
         </select>
 
         <button
